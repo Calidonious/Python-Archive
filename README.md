@@ -11,10 +11,10 @@ i have made a few custom json files for custom color themes for my program unlik
 you just select the color you want and hit the save theme button and the program will warn you its going to auto restart and it will reopen with your selected color theme
 
 required modules to run the program:
-tkinter
-Customtkinkter
-pillow
-hashlib
+tkinter, 
+Customtkinkter, 
+pillow, 
+hashlib, 
 forex for python (for the currency converter script)
 
 
