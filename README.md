@@ -21,9 +21,6 @@ forex for python (for the currency converter script)
 in the releases i will release a installer.exe for this that will allow you to install the program to any location and place a shortcut on the desktop for you
 the installer has a uninstaller that is in your chosen install dir
 
-i compiled the installer using nsis and when i download it from github it tells me it might be malicious i dont know why this is as i dont know much about nsis
-but i think its because of that eather way the program is safe even though i wrote it ive also tested it to be sure
-
 i will also release a precomepiled compressed folder if you just want to uncompress and run the calidonious python archive.exe without installing it
 
 when you first start the program you will be in the login menu just create and account and login and your good to go you can delete your account in the main menu
