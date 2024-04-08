@@ -81,11 +81,11 @@ class CardCountingApp:
     @staticmethod
     def get_value(rank):
         if rank in ['2', '3', '4', '5', '6']:
-            return 1
+            return -1
         elif rank in ['7', '8', '9']:
             return 0
         else:
-            return -1
+            return 1
 
     def start_game(self):
         try:

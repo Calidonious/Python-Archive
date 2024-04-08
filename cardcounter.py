@@ -64,11 +64,11 @@ class CardCounterApp:
     @staticmethod
     def get_value(rank):
         if rank in ['2', '3', '4', '5', '6']:
-            return 1
+            return -1
         elif rank in ['7', '8', '9']:
             return 0
         else:
-            return -1
+            return 1
 
     def create_widgets(self):
         self.label_decks = ctk.CTkLabel(self.master, text="Number of Decks:")

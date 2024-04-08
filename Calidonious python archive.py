@@ -99,19 +99,19 @@ class App:
     # Menus
     def show_login_screen(self):
 
-        ###
-
+        ## Stuff in root ##
         # Login Screen
         login_frame = ctk.CTkFrame(self.root)
         login_frame.grid(row=0, column=0, sticky='nesw')
         self.root.geometry("270x523")
 
-        ##
 
+        ## Stuff in Login frame ##
         # Login image frame
         login_frame_image = ctk.CTkFrame(login_frame)
         login_frame_image.grid(row=0, column=0, sticky='nesw', padx=10, pady=10)
 
+        ## Stuff in login frame image ##
         # Image variable
         my_image = ctk.CTkImage(light_image=Image.open("Cali_Logo.png"),
                                 dark_image=Image.open("Cali_Logo.png"),
@@ -119,19 +119,21 @@ class App:
 
         # Image label
         ctk.CTkLabel(login_frame_image, image=my_image, text="").grid(row=0, column=0, padx=10, pady=10)
+        ## End of stuff in login frame image ##
 
-        ##
 
+        ## Login frame main is in login frame along-side login frame image ##
         # Main login frame
         login_frame_main = ctk.CTkFrame(login_frame)
         login_frame_main.grid(row=1, column=0, sticky='nesw', padx=10, pady=10)
 
-        #########################################################################################################
+
+        ## Stuff in login frame main ##
         # Login frame1
         login_frame1 = ctk.CTkFrame(login_frame_main)
         login_frame1.grid(row=0, column=0, sticky='nesw', padx=10, pady=10)
 
-
+        ## Stuff in login frame1 ##
         # Login frame1 widgets
         ctk.CTkLabel(login_frame1, text="Username:").grid(row=0, column=0, padx=5, pady=5, sticky=tk.W)
         username_entry = ctk.CTkEntry(login_frame1, textvariable=self.username_var)
@@ -140,42 +142,44 @@ class App:
         ctk.CTkLabel(login_frame1, text="Password:").grid(row=1, column=0, padx=5, pady=5, sticky=tk.W)
         password_entry = ctk.CTkEntry(login_frame1, textvariable=self.password_var, show="*")
         password_entry.grid(row=1, column=1, padx=10, pady=10, sticky=tk.W)
+        ## End of stuff in login frame1 ##
 
-
-        #########################################################################################################
+        ## Login frame2 is in login frame main along-side login frame1 ##
         #login frame2
         login_frame2 = ctk.CTkFrame(login_frame_main)
         login_frame2.grid(row=1, column=0, padx=10, pady=10)
 
+        ## Stuff in login frame2
         # login frame2 widgets
         login_button = ctk.CTkButton(login_frame2, text="Login", command=self.login)
         login_button.grid(row=0, column=0, columnspan=2, padx=10, pady=10)
 
         create_account_button = ctk.CTkButton(login_frame2, text="Create Account", command=self.create_account)
         create_account_button.grid(row=1, column=0, columnspan=2, padx=10, pady=10)
+        ## End of stuff in login frame2 ##
+        ## End of stuff in login frame main, Login frame and root ##
 
     def create_account(self):
 
-        ###
-
+        ## Stuff in root ##
         # Create Account Screen
         create_account_frame = ctk.CTkFrame(self.root)
         create_account_frame.grid(row=0, column=0, sticky='nesw')
         self.root.geometry("270x250")
 
-        ##
 
+        ## stuff in create account frame ##
         # Main account frame
         create_account_frame_main = ctk.CTkFrame(create_account_frame)
         create_account_frame_main.grid(row=0, column=0, sticky='nesw', padx=10, pady=10)
 
 
-        #########################################################################################################
+        ## Stuff in create account frame main ##
         # Account frame1
         create_account_frame1 = ctk.CTkFrame(create_account_frame_main)
         create_account_frame1.grid(row=0, column=0, sticky='nesw', padx=10, pady=10)
 
-
+        ## Stuff in create account frame1 ##
         # Account frame1 widgets
         ctk.CTkLabel(create_account_frame1, text="Username:").grid(row=0, column=0, padx=5, pady=5)
         new_username_entry = ctk.CTkEntry(create_account_frame1)
@@ -184,36 +188,39 @@ class App:
         ctk.CTkLabel(create_account_frame1, text="Password:").grid(row=1, column=0, padx=5, pady=5)
         new_password_entry = ctk.CTkEntry(create_account_frame1, show="*")
         new_password_entry.grid(row=1, column=1, padx=10, pady=10, sticky=tk.W)
+        ## End of stuff in create account frame1 ##
 
-
-        #########################################################################################################
+        ## create account frame2 is in create account frame main along-side create account frame1 ##
         # Account frame2
         create_account_frame2 = ctk.CTkFrame(create_account_frame_main)
         create_account_frame2.grid(row=1, column=0, padx=10, pady=10)
 
-
+        ## Stuff in create account frame2 ##
         # Account frame2 widgets
         create_button = ctk.CTkButton(create_account_frame2, text="Create Account", command=lambda: self.save_account(new_username_entry.get(), new_password_entry.get()))
         create_button.grid(row=2, column=0, columnspan=2, padx=10, pady=10)
 
-        back_button = ctk.CTkButton(create_account_frame2, text="Back",command=self.show_login_screen)
+        back_button = ctk.CTkButton(create_account_frame2, text="Back", command=self.show_login_screen)
         back_button.grid(row=3, column=0, columnspan=2, padx=10, pady=10)
+        ## End of stuff in create account frame2 ##
+        ## End of Stuff in create account frame main, create account frame and root ##
 
     def logged_in(self):
 
-        ####
-
+        ## Stuff in Root ##
         # Main Menu super frame
         menu_frame = ctk.CTkFrame(self.root)
         menu_frame.grid(row=0, column=0, sticky='nesw')
         self.root.geometry("1020x820")
 
-        ###
 
+        ## Stuff in menu frame ##
         # Calidonious image frame
         menu_frame_image = ctk.CTkFrame(menu_frame)
         menu_frame_image.grid(row=0, column=0, sticky='nesw', padx=10, pady=10)
 
+
+        ## Stuff in menu frame image ##
         # Image variable
         my_image = ctk.CTkImage(light_image=Image.open("calidonious banner 940x250.jpg"),
                                 dark_image=Image.open("calidonious banner 940x250.jpg"),
@@ -221,39 +228,41 @@ class App:
 
         # Image label
         ctk.CTkLabel(menu_frame_image, image=my_image, text="").grid(row=0, column=0, padx=10, pady=10)
+        ## End of stuff in menu frame image ##
 
 
-        ###
-
+        ## menu frame main is in menu frame along-side menu frame image ##
         # Main menu Frame
         menu_frame_main = ctk.CTkFrame(menu_frame)
         menu_frame_main.grid(row=1, column=0, sticky='nesw', padx=10, pady=10)
 
-
-        ##
-
+        ## Stuff in menu frame main ##
         # Main top frame
         menu_frame_top = ctk.CTkFrame(menu_frame_main)
         menu_frame_top.grid(row=0, column=0, columnspan=2, padx=10, pady=10)
 
 
-        #########################################################################################################
+        ## Stuff in menu frame top ##
         # Menu frame 1 stuff
         menu_frame1= ctk.CTkFrame(menu_frame_top)
         menu_frame1.grid(row=0, column=0, padx=10, pady=10)
 
-        ###############################################
+        ## Stuff in main frame1 ##
         # Menu frame for label1
         menu_frame_label1 = ctk.CTkFrame(menu_frame1)
         menu_frame_label1.grid(row=0, column=0, columnspan=2, padx=10, pady=10)
 
+        ## Stuff in menu frame label1 ##
         # Label1
         ctk.CTkLabel(menu_frame_label1, text="Games").grid(row=0, column=0, columnspan=2, padx=30, pady=5)
+        ## End of stuff in main frame label1 ##
 
+        ## games frame is in menu frame1 along-side menu frame label1 ##
         # Scrollable games frame
         games_frame = ctk.CTkScrollableFrame(menu_frame1, width=330, height=10)
         games_frame.grid(row=1, column=0, columnspan=2, padx=10, pady=10, sticky="nsew")
 
+        ## stuff in games frame ##
         # Buttons in menu frame1
         button1 = ctk.CTkButton(games_frame, text="Guess the number", command=self.guess)
         button1.grid(row=1, column=0, columnspan=2, padx=10, pady=10)
@@ -284,27 +293,32 @@ class App:
 
         button10 = ctk.CTkButton(games_frame, text="Card counting game", command=self.cardcountgame)
         button10.grid(row=5, column=2, columnspan=2, padx=10, pady=10)
+        ## End of stuff in games frame ##
+        ## End of stuff in menu frame1 ##
 
 
-        #########################################################################################################
-        # Menu frame 2 stuff
+        ## Menu frame 2 is in menu frame top along-side menu frame1 ##
+        # Menu frame 2
         menu_frame2 = ctk.CTkFrame(menu_frame_top)
         menu_frame2.grid(row=0, column=1, padx=10, pady=10)
 
 
-        ###############################################
+        ## Stuff in menu frame2 ##
         # Menu frame for label2
         menu_frame_label2 = ctk.CTkFrame(menu_frame2)
         menu_frame_label2.grid(row=0, column=0, columnspan=2, padx=10, pady=10)
 
+        ## Stuff in menu frame label2 ##
         # Label2
         ctk.CTkLabel(menu_frame_label2, text="Utilities").grid(row=0, column=0, columnspan=2, padx=30, pady=5)
+        ## End of stuff in menu frame label2 ##
 
+        ## Utilities frame is in menu frame2 along-side menu frame label2 ##
         # Scrollable utilities frame
         utilities_frame = ctk.CTkScrollableFrame(menu_frame2, width=500, height=10)
         utilities_frame.grid(row=1, column=0, columnspan=2, padx=10, pady=10, sticky="nsew")
 
-
+        ## Stuff in utilities frame ##
         # Buttons in menu frame
         button1u = ctk.CTkButton(utilities_frame, text="Grade", command=self.grade)
         button1u.grid(row=0, column=0, columnspan=2, padx=10, pady=10)
@@ -350,19 +364,23 @@ class App:
 
         button15u = ctk.CTkButton(utilities_frame, text="Auto card counter", command=self.card_count)
         button15u.grid(row=4, column=4, padx=10, pady=10)
+        ## end of stuff in utilities frame
+        ## end of stuff in menu frame2 and menu frame top
 
-        ##
 
+        ## Menu frame bottom is in menu frame main along-side menu frame top and menu frame bottom2 ##
         # Main bottom frame
         menu_frame_bottom = ctk.CTkFrame(menu_frame_main)
         menu_frame_bottom.grid(row=1, column=0, padx=10, pady=10)
 
 
-        #########################################################################################################
-        # Menu frame 3 stuff
+        ## Stuff in menu frame bottom ##
+        # Menu frame 3
         menu_frame3 = ctk.CTkFrame(menu_frame_bottom)
         menu_frame3.grid(row=3, column=0, padx=10, pady=10)
 
+
+        ## Stuff in menu frame3 ##
         # Obtaining variables
         try:
             with open('target_date2.txt', 'r') as file:
@@ -387,23 +405,24 @@ class App:
 
         ctk.CTkLabel(menu_frame3, text="Time since last login:").grid(row=2, column=0, padx=5, pady=5)
         ctk.CTkLabel(menu_frame3, textvariable=self.time_difference_var).grid(row=2, column=1, padx=10, pady=5)
+        ## End of stuff in menu frame3 ##
 
-
-        ########################################################################################################
-        # Menu frame 4 stuff
+        ## Menu frame4 is in menu frame bottom along-side menu frame3 ##
+        # Menu frame4
         menu_frame4 = ctk.CTkFrame(menu_frame_bottom)
         menu_frame4.grid(row=3, column=1, padx=10, pady=10)
 
 
-        ###############################################
+        ## Stuff in menu frame4 ##
         # Menu frame for label3
         menu_frame_label4 = ctk.CTkFrame(menu_frame4)
         menu_frame_label4.grid(row=0, column=1, columnspan=2, sticky='nesw', padx=10, pady=10)
 
+        ## Stuff in menu frame label4 ##
         # Label4
         username = self.logged_in_user
         ctk.CTkLabel(menu_frame_label4, text=f"Username: {username}").grid(row=0, column=1, columnspan=2, padx=5, pady=5)
-
+        ## end of stuff in menu frame label4 ##
 
         # Buttons in frame4
         logout_button = ctk.CTkButton(menu_frame4, text="Logout", command=self.logout)
@@ -411,18 +430,20 @@ class App:
 
         delete_account_button = ctk.CTkButton(menu_frame4, text="Delete Account", command=self.delete_account)
         delete_account_button.grid(row=1, column=2, columnspan=2, padx=10, pady=10)
+        ## End of stuff in menu frame4 ##
+        ## End of menu frame bottom ##
 
-
-        ##
-
+        ## Menu frame bottom2 is in menu frame main along-side menu frame top and menu frame bottom ##
         # Main bottom frame2
         menu_frame_bottom2 = ctk.CTkFrame(menu_frame_main)
         menu_frame_bottom2.grid(row=1, column=1, padx=10, pady=10)
 
-        ########################################################################################################
+
+        ## Stuff in menu frame bottom2 ##
         menu_frame_appearance = ctk.CTkFrame(menu_frame_bottom2)
         menu_frame_appearance.grid(row=0, column=0, padx=10, pady=10)
 
+        ## Stuff in menu frame appearance ##
         ctk.CTkLabel(menu_frame_appearance, text="appearance mode:").grid(row=0, column=0, padx=5, pady=5)
 
         choices = ["System", "dark", "light"]
@@ -431,11 +452,14 @@ class App:
 
         theme_button = ctk.CTkButton(menu_frame_appearance, text="Save appearance mode", command=self.set_appearance)
         theme_button.grid(row=2, column=0, padx=10, pady=10)
+        ## End of stuff in menu frame appearance ##
 
-        ########################################################################################################
+
+        ## Menu frame theme is in menu frame bottom2 along-side menu frame appearance ##
         menu_frame_theme = ctk.CTkFrame(menu_frame_bottom2)
         menu_frame_theme.grid(row=0, column=1, padx=10, pady=10)
 
+        ## Stuff in menu frame theme ##
         ctk.CTkLabel(menu_frame_theme, text="Color theme:").grid(row=2, column=0, padx=5, pady=5)
 
         choices2 = ["pink", "purple", "red", "orange", "yellow", 'light-green', "green", "dark-green", "light-blue", "blue", "dark-blue"]
@@ -444,6 +468,8 @@ class App:
 
         theme_button = ctk.CTkButton(menu_frame_theme, text="Switch theme", command=self.set_theme)
         theme_button.grid(row=4, column=0, padx=10, pady=10)
+        ## end of stuff in menu frame theme
+        ## End of menu frame bottom 2, menu frame main, menu frame and root ##
 
 
     # login functions
@@ -811,4 +837,3 @@ def app_run():
 # Running main function on start
 if __name__ == "__main__":
     app_run()
-

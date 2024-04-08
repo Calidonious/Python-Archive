@@ -50,12 +50,16 @@ class RocketCalculator(ctk.CTk):
         self.title("Rocket Payload Calculator")
         self.resizable(False, False)
 
+        ## Stuff in ctk.CTk ##
         master_menu_frame = ctk.CTkFrame(self)
         master_menu_frame.grid(row=0, column=0, sticky='nesw', padx=10, pady=10)
+        ## End of stuff in ctk.CTk ##
 
+        ## Stuff in Master_menu_frame ##
         menu_frame= ctk.CTkFrame(master_menu_frame)
         menu_frame.grid(row=0, column=0, sticky='nesw', padx=10, pady=10)
 
+        ## Stuff in menu_frame ##
         self.intro_label = ctk.CTkLabel(menu_frame, text="This program calculates all the specs of the rocket,\n"
                                                    "You will need to get your payload(satellite) into orbit,\n"
                                                    "At your desired altitude, it asks you to select a engine,\n"
@@ -63,39 +67,35 @@ class RocketCalculator(ctk.CTk):
                                                    "Your rocket needs to have a thrust to weight ratio of 1.00,\n"
                                                    "In order to fly ex. 0.75 means your engine can lift %75,\n"
                                                    "Of the rocket weight and you need to add more engines.\n"
-                                                   "The average range of satellite weights is 100-3500kg in real life.")
-        self.intro_label.grid(row=0, columnspan=2, padx=10, pady=10)
+                                                   "The average range of satellite weights is 100-3500kg in real life.\n\n"
+                                                    "The range of average altitudes depends on your misson requirements,\n"
+                                                    "The boundary commonly used to define the beginning of space is the Kármán line,\n"
+                                                    "The Kármán line is located approximately 100 kilometers above sea level.\n\n"
+                                                         
+                                                    "Low Earth Orbit (LEO): 160 kilometers to 2,000 kilometers. \n"
+                                                    "Uses: Earth observation, communication, and scientific missions.\n\n"
+                                                         
+                                                    "Medium Earth Orbit (MEO): 2,000 kilometers to 35,786 kilometers.\n"
+                                                    "Uses: Navigation satellites, such as those used in GPS systems.\n\n"
+                                                         
+                                                    "Geostationary Orbit (GEO): 35,786 kilometers above Earth's equator\n"
+                                                    "and orbit at the same speed as the Earth's rotation.\n"
+                                                    "Uses: communication and weather satellites.\n\n"
+                                                         
+                                                    "Highly Elliptical Orbit (HEO): 200 to 40000 kilometers.\n"
+                                                    "One point of the orbit close to Earth and the other far away.\n"
+                                                    "Uses: communication, navigation, and scientific missions.\n\n"
+                                                         
+                                                    "Polar Orbit: 700 kilometers to 1,200 kilometers and orbit the Earth's poles.\n"
+                                                    "uses: Earth observation and scientific missions.")
+        self.intro_label.grid(row=0, column=0, padx=10, pady=10)
 
-        self.warning_label = ctk.CTkLabel(menu_frame, text="Limitations of this program!\n"
-                                                     "\n-1. It assumes your rocket is single stage,\n"
-                                                     "And that your taking the whole rocket to space,\n"
-                                                     "Which is not efficient compared to multi-stage.\n"
-                                                     "\n-2. It assumes your going to go straight up,\n"
-                                                     "And not use a curved assent profile,\n"
-                                                     "Which is obviously way more efficient.\n"
-                                                     "\n-3. It assumes gravity is constant, it is not,\n"
-                                                     "In real life gravity decreases exponentially the farther from earth you are,\n"
-                                                     "Meaning you will need less thrust and use less fuel as you ascend.\n"
-                                                     "\n-4. It assumes your going full throttle the whole way,\n"
-                                                     "In real life you would feather the throttle out as you ascend,\n"
-                                                     "Saving you fuel because your not wasting fuel \n"
-                                                     "By over speeding and fighting against the atmosphere.\n"
-                                                     "\n-5. It assumes the isp, thrust and fuel density values of the rocket,\n"
-                                                     "Will not change or fluctuate during flight and that you will get the rated fuel economy.\n"
-                                                     "\n-6. it assumes the rocket will remain the same weight during the entire flight,\n"
-                                                     "In real life your rocket will lose weight as it uses the fuel which would save fuel.\n"
-                                                     "\nKeeping these things in mind,\n"
-                                                     "You will more then likely need way less fuel then listed to get to orbit,\n"
-                                                     "But it greatly depends on your launch strategy!")
-        self.warning_label.grid(row=1, columnspan=2, padx=10, pady=5)
-
-        menu_frame2 = ctk.CTkFrame(master_menu_frame)
-        menu_frame2.grid(row=0, column=1, sticky='nesw', padx=10, pady=10)
-
-        main_menu_frame = ctk.CTkFrame(menu_frame2)
+        main_menu_frame = ctk.CTkFrame(menu_frame)
         main_menu_frame.grid(row=1, column=0, sticky='nesw', padx=10, pady=10)
+        ## End stuff in Menu_frame ##
 
 
+        ## Stuff in main_menu_frame ##
         self.payload_weight_label = ctk.CTkLabel(main_menu_frame, text="Payload Weight (kg):")
         self.payload_weight_label.grid(row=0, column=0, padx=10, pady=10, sticky="e")
         self.payload_weight_entry = ctk.CTkEntry(main_menu_frame, placeholder_text="500")
@@ -103,7 +103,7 @@ class RocketCalculator(ctk.CTk):
 
         self.altitude_label = ctk.CTkLabel(main_menu_frame, text="Orbit Altitude (km):")
         self.altitude_label.grid(row=1, column=0, padx=10, pady=5, sticky="e")
-        self.altitude_entry = ctk.CTkEntry(main_menu_frame, placeholder_text="200000")
+        self.altitude_entry = ctk.CTkEntry(main_menu_frame, placeholder_text="35786")
         self.altitude_entry.grid(row=1, column=1, padx=10, pady=5)
 
         self.engine_label = ctk.CTkLabel(main_menu_frame, text="Select Rocket Engine:")
@@ -118,22 +118,55 @@ class RocketCalculator(ctk.CTk):
         self.num_engines_entry = ctk.CTkEntry(main_menu_frame, placeholder_text="1")
         self.num_engines_entry.grid(row=3, column=1, padx=10, pady=5)
 
-        self.fuel_label = ctk.CTkLabel(self, text="Select Fuel Type:")
-        # self.fuel_label.grid(row=4, column=0, padx=10, pady=5, sticky="e")
-        self.fuel_var = tk.StringVar(value="")  # Default value is empty
-        self.fuel_combobox = ctk.CTkComboBox(self, variable=self.fuel_var)
-        self.fuel_combobox['values'] = list(Rocket.FUEL_TYPES.keys())
-        # self.fuel_combobox.grid(row=4, column=1, padx=10, pady=5)
-
-
         self.calculate_button = ctk.CTkButton(main_menu_frame, text="Calculate", command=self.calculate)
         self.calculate_button.grid(row=4, columnspan=2, padx=10, pady=10)
+        ## End of stuff in main_menu_frame ##
+
+        ## menu_frame2 is in master_menu_frame alongside menu_frame ##
+        menu_frame2 = ctk.CTkFrame(master_menu_frame)
+        menu_frame2.grid(row=0, column=1, sticky='nesw', padx=10, pady=10)
+        ## End of stuff in Master_menu_frame ##
+
+        ## Stuff in menu_frame2 ##
+        self.warning_label = ctk.CTkLabel(menu_frame2, text="Limitations of this program!\n"
+                                                            "\n-1. It assumes your rocket is single stage,\n"
+                                                            "And that your taking the whole rocket to space,\n"
+                                                            "Which is not efficient compared to multi-stage.\n"
+                                                            "\n-2. It assumes your going to go straight up,\n"
+                                                            "And not use a curved assent profile,\n"
+                                                            "Which is obviously way more efficient.\n"
+                                                            "\n-3. It assumes gravity is constant, it is not,\n"
+                                                            "In real life gravity decreases exponentially the farther from earth you are,\n"
+                                                            "Meaning you will need less thrust and use less fuel as you ascend.\n"
+                                                            "\n-4. It assumes your going full throttle the whole way,\n"
+                                                            "In real life you would feather the throttle out as you ascend,\n"
+                                                            "Saving you fuel because your not wasting fuel \n"
+                                                            "By over speeding and fighting against the atmosphere.\n"
+                                                            "\n-5. It assumes the isp, thrust and fuel density values of the rocket,\n"
+                                                            "Will not change or fluctuate during flight and that you will get the rated fuel economy.\n"
+                                                            "\n-6. it assumes the rocket will remain the same weight during the entire flight,\n"
+                                                            "In real life your rocket will lose weight as it uses the fuel which would save fuel.\n"
+                                                            "\nKeeping these things in mind,\n"
+                                                            "You will more then likely need way less fuel then listed to get to orbit,\n"
+                                                            "But it greatly depends on your launch strategy!")
+        self.warning_label.grid(row=0, column=0, padx=10, pady=10)
 
         result_menu_frame = ctk.CTkScrollableFrame(menu_frame2, width=320, height=250)
         result_menu_frame.grid(row=2, column=0, sticky="nsew", padx=10, pady=10)
+        ## End of stuff in Menu_frame2 ##
+
+        ## Stuff in result_menu_frame ##
+        lab_frame =  ctk.CTkFrame(result_menu_frame, fg_color="gray20")
+        lab_frame.grid(row=0, column=0, sticky="ew", padx=5, pady=5)
+
+        ## Stuff in lab_frame ##
+        self.results_label1 = ctk.CTkLabel(lab_frame, text="Results below!")
+        self.results_label1.grid(row=0, column=0, columnspan=2, sticky="nsew", padx=175, pady=5)
+        ## End of stuff in lab_frame##
 
         self.results_label = ctk.CTkLabel(result_menu_frame, text="")
-        self.results_label.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
+        self.results_label.grid(row=1, column=0, sticky="nsew", padx=10, pady=10)
+        ## End of stuff in result_menu_frame ##
 
     def calculate(self):
         try:
@@ -141,13 +174,7 @@ class RocketCalculator(ctk.CTk):
             altitude = float(self.altitude_entry.get())
             num_engines = int(self.num_engines_entry.get())
             engine = self.engine_var.get()
-            fuel_type = self.fuel_var.get()
-
-            # If engine or fuel is not selected, pick the best engine and fuel
-            if not engine:
-                engine = max(Rocket.ROCKET_ENGINES, key=lambda x: Rocket.ROCKET_ENGINES[x]["Thrust"])
-            if not fuel_type:
-                fuel_type = Rocket.ROCKET_ENGINES[engine]["Fuel_Type"]
+            fuel_type = Rocket.ROCKET_ENGINES[engine]["Fuel_Type"]
 
             rocket = Rocket(payload_weight, altitude, engine, fuel_type, num_engines)
             self.results_label.configure(text=rocket.calculate_performance())
@@ -219,10 +246,6 @@ class Rocket:
         "Star 48GX - Solid Propellant": {"ISP": 284, "Thrust": 66700, "Fuel_Type": "Solid Propellant"},
     }
 
-    # Constants for chassis weight estimation (values are approximate)
-    PAYLOAD_TO_CHASSIS_RATIO = 0.02  # Ratio of chassis weight to payload weight
-    FUEL_TO_CHASSIS_RATIO = 0.04     # Ratio of chassis weight to propellant weight
-
     def __init__(self, payload_weight, altitude, engine, fuel_type, num_engines):
         self.payload_weight = payload_weight
         self.altitude = altitude
@@ -234,22 +257,19 @@ class Rocket:
         engine_thrust = self.ROCKET_ENGINES[self.engine]["Thrust"] * self.num_engines
         engine_isp = self.ROCKET_ENGINES[self.engine]["ISP"]
         fuel_density = self.FUEL_TYPES[self.fuel_type]["Density"]
-        fuel_liters_needed = self.calculate_fuel_liters(fuel_density, engine_thrust, engine_isp)
-        propellant_weight = self.get_propellant_weight(fuel_density, engine_thrust, engine_isp)
-        chassis_weight = self.estimate_chassis_weight()
+        burn_time = self.altitude / engine_isp
+        fuel_liters_needed = (engine_thrust / engine_isp) * burn_time / fuel_density
+        propellant_weight = fuel_liters_needed * fuel_density
+        chassis_weight = self.estimate_chassis_weight(propellant_weight)
         rocket_weight = self.payload_weight + propellant_weight + chassis_weight
-        thrust_weight_ratio = self.get_thrust_weight_ratio(rocket_weight, engine_thrust)
-        burn_time = self.altitude / engine_isp  # Burn time calculation
+        thrust_weight_ratio = engine_thrust / rocket_weight
         delta_v = self.calculate_delta_v(propellant_weight)
 
-        thrust_weight_ratio1 = 0
-        num_engine = 0
+        if thrust_weight_ratio <= 1.00:
+            needed_engines = "Add more thrust!"
+        else:
+            needed_engines = "Ready for Lift-off!"
 
-        while thrust_weight_ratio1 <= 1.00:
-            num_engine += 1
-            engine_thrust1 = self.ROCKET_ENGINES[self.engine]["Thrust"] * num_engine
-            rocket_weight1 = self.payload_weight + propellant_weight + chassis_weight
-            thrust_weight_ratio1 = self.get_thrust_weight_ratio(rocket_weight1, engine_thrust1)
 
         return f"Total Weight: {rocket_weight:.2f} kg\n" \
                f"Payload Weight: {self.payload_weight:.2f} kg\n" \
@@ -262,49 +282,34 @@ class Rocket:
                f"Selected Fuel Density: {fuel_density} kg/L\n" \
                f"Total Engine Thrust: {engine_thrust} N\n" \
                f"Thrust to Weight Ratio: {thrust_weight_ratio:.2f}\n" \
-               f"Engines for Thrust-to-Weight Ratio > 1.00: {num_engine}\n" \
+               f"Do i have enough engines?: {needed_engines}\n" \
                f"Engine ISP: {engine_isp} s\n" \
                f"Burn Time: {burn_time:.2f} seconds\n" \
                f"Delta-V: {delta_v:.2f} m/s"
-
-    def get_propellant_weight(self, fuel_density, engine_thrust, engine_isp):
-        # Calculate propellant weight based on the selected fuel's density
-        fuel_liters_needed = self.calculate_fuel_liters(fuel_density, engine_thrust, engine_isp)
-        propellant_weight = fuel_liters_needed * fuel_density
-        return propellant_weight
-
-    @staticmethod
-    def get_thrust_weight_ratio(rocket_weight, engine_thrust):
-        # Calculate thrust-to-weight ratio based on rocket weight and engine thrust
-        thrust_weight_ratio = engine_thrust / rocket_weight
-        return thrust_weight_ratio
-
-    def calculate_fuel_liters(self, fuel_density, engine_thrust, engine_isp):
-        # Calculate the fuel needed based on altitude, rocket parameters, and engine specifics
-        burn_time = self.altitude / engine_isp  # Assuming linear ascent
-        fuel_consumption_rate = engine_thrust / engine_isp  # Constant thrust assumed
-        total_fuel_needed = fuel_consumption_rate * burn_time
-        fuel_liters_needed = total_fuel_needed / fuel_density
-        return fuel_liters_needed
 
     def calculate_delta_v(self, propellant_weight):
         # Constants for delta-V calculation (values are approximate)
         g0 = 9.81  # Earth's surface gravity (m/s^2)
         earth_radius = 6371000  # Earth's radius (m)
         altitude = self.altitude
+
         # Total mass of the rocket, including payload
         total_mass = self.payload_weight + propellant_weight
         payload_mass = self.payload_weight
+
         # Delta-V formula: delta-V = sqrt(g0 * earth_radius) * (sqrt(2 * (altitude + earth_radius)) - sqrt(earth_radius))
-        delta_v = (g0 * total_mass / (total_mass - payload_mass)) ** 0.5 * \
-                  (2 * (altitude + earth_radius)) ** 0.5 - earth_radius ** 0.5
+        delta_v = (g0 * total_mass / (total_mass - payload_mass)) ** 0.5 * (2 * (altitude + earth_radius)) ** 0.5 - earth_radius ** 0.5
         return delta_v
 
-    def estimate_chassis_weight(self):
+    def estimate_chassis_weight(self, propellant_weight):
+
+        # Constants for chassis weight estimation (values are approximate)
+        payload_chassis_ratio = 0.02  # Ratio of chassis weight to payload weight
+        fuel_chassis_ratio = 0.02  # Ratio of chassis weight to propellant weight
+
         # Estimate the weight of the rocket's chassis based on payload and propellant weight
-        chassis_weight_from_payload = self.payload_weight * self.PAYLOAD_TO_CHASSIS_RATIO
-        chassis_weight_from_fuel = self.get_propellant_weight(self.FUEL_TYPES[self.fuel_type]["Density"], self.ROCKET_ENGINES[self.engine]["Thrust"],
-                                                              self.ROCKET_ENGINES[self.engine]["ISP"]) * self.FUEL_TO_CHASSIS_RATIO
+        chassis_weight_from_payload = self.payload_weight * payload_chassis_ratio
+        chassis_weight_from_fuel = propellant_weight * fuel_chassis_ratio
         total_chassis_weight = chassis_weight_from_payload + chassis_weight_from_fuel
         return total_chassis_weight
 
@@ -312,5 +317,3 @@ class Rocket:
 if __name__ == "__main__":
     app = RocketCalculator()
     app.mainloop()
-
-

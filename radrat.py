@@ -3,8 +3,8 @@ import sys
 import random
 
 # Constants
-WIDTH, HEIGHT = 800, 600
-CELL_SIZE = 40
+WIDTH, HEIGHT = 900, 700
+CELL_SIZE = 20
 MAZE_WIDTH, MAZE_HEIGHT = WIDTH // CELL_SIZE, HEIGHT // CELL_SIZE
 WALL_COLOR = (0, 0, 0)
 PLAYER_COLOR = (128, 0, 128)  # Purple
