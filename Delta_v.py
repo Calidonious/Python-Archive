@@ -1,5 +1,6 @@
 import tkinter as tk
 import customtkinter as ctk
+import math
 
 
 # Lookup and set saved theme
@@ -197,54 +198,54 @@ class Rocket:
         "HTPB": {"Density": 1.65},
         "Solid Propellant": {"Density": 1.7},
     }
-
     ROCKET_ENGINES = {
-        "AJ-10 - N2O4": {"ISP": 319, "Thrust": 43000, "Fuel_Type": "N2O4"},
-        "Vernier - N2O4": {"ISP": 312, "Thrust": 100, "Fuel_Type": "N2O4"},
-        "R-4D - N2O4": {"ISP": 312, "Thrust": 490, "Fuel_Type": "N2O4"},
-        "RD-180 - Liquid Hydrogen": {"ISP": 311, "Thrust": 4150000, "Fuel_Type": "Liquid Hydrogen"},
-        "RS-25 - Liquid Hydrogen": {"ISP": 452, "Thrust": 1860000, "Fuel_Type": "Liquid Hydrogen"},
-        "J-2 - Liquid Hydrogen": {"ISP": 421, "Thrust": 1000000, "Fuel_Type": "Liquid Hydrogen"},
-        "RS-68A - Liquid Hydrogen": {"ISP": 420, "Thrust": 3800000, "Fuel_Type": "Liquid Hydrogen"},
-        "RL10 - Liquid Hydrogen": {"ISP": 444, "Thrust": 110000, "Fuel_Type": "Liquid Hydrogen"},
-        "HM7B - Liquid Hydrogen": {"ISP": 446, "Thrust": 62000, "Fuel_Type": "Liquid Hydrogen"},
-        "LE-5 - Liquid Hydrogen": {"ISP": 444, "Thrust": 13700, "Fuel_Type": "Liquid Hydrogen"},
-        "Vulcain 2 - Liquid Hydrogen": {"ISP": 434, "Thrust": 13800, "Fuel_Type": "Liquid Hydrogen"},
-        "BE-3U - Liquid Hydrogen": {"ISP": 446, "Thrust": 49000, "Fuel_Type": "Liquid Hydrogen"},
-        "RS-27 - Liquid Oxygen": {"ISP": 303, "Thrust": 890000, "Fuel_Type": "Liquid Oxygen"},
-        "RS-27A - Liquid Oxygen": {"ISP": 303, "Thrust": 1000000, "Fuel_Type": "Liquid Oxygen"},
-        "RS-27B - Liquid Oxygen": {"ISP": 303, "Thrust": 1000000, "Fuel_Type": "Liquid Oxygen"},
-        "RS-27C - Liquid Oxygen": {"ISP": 303, "Thrust": 1050000, "Fuel_Type": "Liquid Oxygen"},
-        "RD-0146 - Liquid Oxygen": {"ISP": 465, "Thrust": 146000, "Fuel_Type": "Liquid Oxygen"},
-        "RL10B-2 - Liquid Oxygen": {"ISP": 450, "Thrust": 110000, "Fuel_Type": "Liquid Oxygen"},
-        "RS-68B - Liquid Oxygen/Kerosene": {"ISP": 410, "Thrust": 4000000, "Fuel_Type": "Liquid Oxygen"},
-        "HM7C - Liquid Oxygen/Kerosene": {"ISP": 453, "Thrust": 68000, "Fuel_Type": "Liquid Oxygen"},
-        "Viking - Liquid Oxygen/Kerosene": {"ISP": 330, "Thrust": 69000, "Fuel_Type": "Liquid Oxygen"},
-        "RL-60 - Liquid Oxygen/Liquid Hydrogen": {"ISP": 465, "Thrust": 266000, "Fuel_Type": "Liquid Oxygen"},
-        "Merlin 1D - Kerosene": {"ISP": 282, "Thrust": 845000, "Fuel_Type": "Kerosene"},
-        "Newton - Liquid Oxygen/Kerosene": {"ISP": 312, "Thrust": 24000, "Fuel_Type": "Liquid Oxygen"},
-        "F-1 - RP-1": {"ISP": 304, "Thrust": 6770000, "Fuel_Type": "RP-1"},
-        "F-1B - RP-1": {"ISP": 304, "Thrust": 7800000, "Fuel_Type": "RP-1"},
-        "Rutherford - Liquid Methane": {"ISP": 343, "Thrust": 24250, "Fuel_Type": "Liquid Methane"},
-        "LR-91 - Hydrazine": {"ISP": 315, "Thrust": 68, "Fuel_Type": "Hydrazine"},
-        "LR-87 - Hydrazine": {"ISP": 312, "Thrust": 445000, "Fuel_Type": "Hydrazine"},
-        "LR-89 - Hydrazine": {"ISP": 312, "Thrust": 822000, "Fuel_Type": "Hydrazine"},
-        "LE-5 - Hydrazine": {"ISP": 444, "Thrust": 13700, "Fuel_Type": "Hydrazine"},
-        "LE-9 - Hydrogen Peroxide": {"ISP": 446, "Thrust": 77000, "Fuel_Type": "Hydrogen Peroxide"},
-        "LE-10 - Hydrogen Peroxide": {"ISP": 451, "Thrust": 116000, "Fuel_Type": "Hydrogen Peroxide"},
-        "LE-7A - Hydrogen Peroxide": {"ISP": 431, "Thrust": 875000, "Fuel_Type": "Hydrogen Peroxide"},
-        "Fregat-SB - Hydrogen Peroxide": {"ISP": 333, "Thrust": 27500, "Fuel_Type": "Hydrogen Peroxide"},
-        "HM7 - UDMH": {"ISP": 446, "Thrust": 62000, "Fuel_Type": "UDMH"},
-        "HM7B-NA - UDMH": {"ISP": 446, "Thrust": 62000, "Fuel_Type": "UDMH"},
-        "Castor 120 - Solid Propellant": {"ISP": 270, "Thrust": 513000, "Fuel_Type": "Solid Propellant"},
-        "Castor 30 - Solid Propellant": {"ISP": 270, "Thrust": 128000, "Fuel_Type": "Solid Propellant"},
-        "Castor 300 - Solid Propellant": {"ISP": 270, "Thrust": 444000, "Fuel_Type": "Solid Propellant"},
-        "Castor 4A - Solid Propellant": {"ISP": 255, "Thrust": 97400, "Fuel_Type": "Solid Propellant"},
-        "Star 63 - Solid Propellant": {"ISP": 276, "Thrust": 640000, "Fuel_Type": "Solid Propellant"},
-        "Star 48BV - Solid Propellant": {"ISP": 284, "Thrust": 66700, "Fuel_Type": "Solid Propellant"},
-        "Star 30BP - Solid Propellant": {"ISP": 269, "Thrust": 28800, "Fuel_Type": "Solid Propellant"},
-        "Star 48GX - Solid Propellant": {"ISP": 284, "Thrust": 66700, "Fuel_Type": "Solid Propellant"},
+    "AJ-10 - N2O4": {"ISP": 319, "Thrust": 43000, "Fuel_Type": "N2O4", "Weight": 98},
+    "Vernier - N2O4": {"ISP": 312, "Thrust": 100, "Fuel_Type": "N2O4", "Weight": 100},
+    "R-4D - N2O4": {"ISP": 312, "Thrust": 490, "Fuel_Type": "N2O4", "Weight": 250},
+    "RD-180 - Liquid Hydrogen": {"ISP": 311, "Thrust": 4150000, "Fuel_Type": "Liquid Hydrogen", "Weight": 5300},
+    "RS-25 - Liquid Hydrogen": {"ISP": 452, "Thrust": 1860000, "Fuel_Type": "Liquid Hydrogen", "Weight": 3500},
+    "J-2 - Liquid Hydrogen": {"ISP": 421, "Thrust": 1000000, "Fuel_Type": "Liquid Hydrogen", "Weight": 1800},
+    "RS-68A - Liquid Hydrogen": {"ISP": 420, "Thrust": 3800000, "Fuel_Type": "Liquid Hydrogen", "Weight": 3300},
+    "RL10 - Liquid Hydrogen": {"ISP": 444, "Thrust": 110000, "Fuel_Type": "Liquid Hydrogen", "Weight": 310},
+    "HM7B - Liquid Hydrogen": {"ISP": 446, "Thrust": 62000, "Fuel_Type": "Liquid Hydrogen", "Weight": 300},
+    "LE-5 - Liquid Hydrogen": {"ISP": 444, "Thrust": 13700, "Fuel_Type": "Liquid Hydrogen", "Weight": 300},
+    "Vulcain 2 - Liquid Hydrogen": {"ISP": 434, "Thrust": 13800, "Fuel_Type": "Liquid Hydrogen", "Weight": 2000},
+    "BE-3U - Liquid Hydrogen": {"ISP": 446, "Thrust": 49000, "Fuel_Type": "Liquid Hydrogen", "Weight": 2000},
+    "RS-27 - Liquid Oxygen": {"ISP": 303, "Thrust": 890000, "Fuel_Type": "Liquid Oxygen", "Weight": 1200},
+    "RS-27A - Liquid Oxygen": {"ISP": 303, "Thrust": 1000000, "Fuel_Type": "Liquid Oxygen", "Weight": 1200},
+    "RS-27B - Liquid Oxygen": {"ISP": 303, "Thrust": 1000000, "Fuel_Type": "Liquid Oxygen", "Weight": 1200},
+    "RS-27C - Liquid Oxygen": {"ISP": 303, "Thrust": 1050000, "Fuel_Type": "Liquid Oxygen", "Weight": 1200},
+    "RD-0146 - Liquid Oxygen": {"ISP": 465, "Thrust": 146000, "Fuel_Type": "Liquid Oxygen", "Weight": 400},
+    "RL10B-2 - Liquid Oxygen": {"ISP": 450, "Thrust": 110000, "Fuel_Type": "Liquid Oxygen", "Weight": 310},
+    "RS-68B - Liquid Oxygen/Kerosene": {"ISP": 410, "Thrust": 4000000, "Fuel_Type": "Liquid Oxygen", "Weight": 3300},
+    "HM7C - Liquid Oxygen/Kerosene": {"ISP": 453, "Thrust": 68000, "Fuel_Type": "Liquid Oxygen", "Weight": 300},
+    "Viking - Liquid Oxygen/Kerosene": {"ISP": 330, "Thrust": 69000, "Fuel_Type": "Liquid Oxygen", "Weight": 900},
+    "RL-60 - Liquid Oxygen/Liquid Hydrogen": {"ISP": 465, "Thrust": 266000, "Fuel_Type": "Liquid Oxygen", "Weight": 450},
+    "Merlin 1D - Kerosene": {"ISP": 282, "Thrust": 845000, "Fuel_Type": "Kerosene", "Weight": 470},
+    "Newton - Liquid Oxygen/Kerosene": {"ISP": 312, "Thrust": 24000, "Fuel_Type": "Liquid Oxygen", "Weight": 200},
+    "F-1 - RP-1": {"ISP": 304, "Thrust": 6770000, "Fuel_Type": "RP-1", "Weight": 8500},
+    "F-1B - RP-1": {"ISP": 304, "Thrust": 7800000, "Fuel_Type": "RP-1", "Weight": 9000},
+    "Rutherford - Liquid Methane": {"ISP": 343, "Thrust": 24250, "Fuel_Type": "Liquid Methane", "Weight": 200},
+    "LR-91 - Hydrazine": {"ISP": 315, "Thrust": 68, "Fuel_Type": "Hydrazine", "Weight": 340},
+    "LR-87 - Hydrazine": {"ISP": 312, "Thrust": 445000, "Fuel_Type": "Hydrazine", "Weight": 700},
+    "LR-89 - Hydrazine": {"ISP": 312, "Thrust": 822000, "Fuel_Type": "Hydrazine", "Weight": 1000},
+    "LE-5 - Hydrazine": {"ISP": 444, "Thrust": 13700, "Fuel_Type": "Hydrazine", "Weight": 300},
+    "LE-9 - Hydrogen Peroxide": {"ISP": 446, "Thrust": 77000, "Fuel_Type": "Hydrogen Peroxide", "Weight": 1200},
+    "LE-10 - Hydrogen Peroxide": {"ISP": 451, "Thrust": 116000, "Fuel_Type": "Hydrogen Peroxide", "Weight": 1300},
+    "LE-7A - Hydrogen Peroxide": {"ISP": 431, "Thrust": 875000, "Fuel_Type": "Hydrogen Peroxide", "Weight": 1700},
+    "Fregat-SB - Hydrogen Peroxide": {"ISP": 333, "Thrust": 27500, "Fuel_Type": "Hydrogen Peroxide", "Weight": 950},
+    "HM7 - UDMH": {"ISP": 446, "Thrust": 62000, "Fuel_Type": "UDMH", "Weight": 300},
+    "HM7B-NA - UDMH": {"ISP": 446, "Thrust": 62000, "Fuel_Type": "UDMH", "Weight": 300},
+    "Castor 120 - Solid Propellant": {"ISP": 270, "Thrust": 513000, "Fuel_Type": "Solid Propellant", "Weight": 6000},
+    "Castor 30 - Solid Propellant": {"ISP": 270, "Thrust": 128000, "Fuel_Type": "Solid Propellant", "Weight": 2000},
+    "Castor 300 - Solid Propellant": {"ISP": 270, "Thrust": 444000, "Fuel_Type": "Solid Propellant", "Weight": 4000},
+    "Castor 4A - Solid Propellant": {"ISP": 255, "Thrust": 97400, "Fuel_Type": "Solid Propellant", "Weight": 1500},
+    "Star 63 - Solid Propellant": {"ISP": 276, "Thrust": 640000, "Fuel_Type": "Solid Propellant", "Weight": 3000},
+    "Star 48BV - Solid Propellant": {"ISP": 284, "Thrust": 66700, "Fuel_Type": "Solid Propellant", "Weight": 1100},
+    "Star 30BP - Solid Propellant": {"ISP": 269, "Thrust": 28800, "Fuel_Type": "Solid Propellant", "Weight": 900},
+    "Star 48GX - Solid Propellant": {"ISP": 284, "Thrust": 66700, "Fuel_Type": "Solid Propellant", "Weight": 1100},
     }
+
 
     def __init__(self, payload_weight, altitude, engine, fuel_type, num_engines):
         self.payload_weight = payload_weight
@@ -256,14 +257,17 @@ class Rocket:
     def calculate_performance(self):
         engine_thrust = self.ROCKET_ENGINES[self.engine]["Thrust"] * self.num_engines
         engine_isp = self.ROCKET_ENGINES[self.engine]["ISP"]
+        engine_weight = self.ROCKET_ENGINES[self.engine]["Weight"] * self.num_engines
         fuel_density = self.FUEL_TYPES[self.fuel_type]["Density"]
         burn_time = self.altitude / engine_isp
         fuel_liters_needed = (engine_thrust / engine_isp) * burn_time / fuel_density
         propellant_weight = fuel_liters_needed * fuel_density
         chassis_weight = self.estimate_chassis_weight(propellant_weight)
-        rocket_weight = self.payload_weight + propellant_weight + chassis_weight
+        dry_mass = self.payload_weight + chassis_weight + engine_weight
+        rocket_weight = self.payload_weight + propellant_weight + chassis_weight + engine_weight
         thrust_weight_ratio = engine_thrust / rocket_weight
-        delta_v = self.calculate_delta_v(propellant_weight)
+        delta_v = self.calculate_delta_v(propellant_weight, dry_mass, engine_isp)
+        orbital_delta_v = self.calculate_orbital_delta_v()
 
         if thrust_weight_ratio <= 1.00:
             needed_engines = "Add more thrust!"
@@ -285,21 +289,33 @@ class Rocket:
                f"Do i have enough engines?: {needed_engines}\n" \
                f"Engine ISP: {engine_isp} s\n" \
                f"Burn Time: {burn_time:.2f} seconds\n" \
-               f"Delta-V: {delta_v:.2f} m/s"
+               f"Delta-V Available: {delta_v:.2f} m/s" \
+               f"Delta-V required for altitude: {orbital_delta_v:.2f} m/s"
 
-    def calculate_delta_v(self, propellant_weight):
+    def calculate_delta_v(self, propellant_weight, dry_mass, engine_isp):
+        # Calculates total amount of delta-v availale in the rocket
         # Constants for delta-V calculation (values are approximate)
         g0 = 9.81  # Earth's surface gravity (m/s^2)
-        earth_radius = 6371000  # Earth's radius (m)
-        altitude = self.altitude
-
-        # Total mass of the rocket, including payload
-        total_mass = self.payload_weight + propellant_weight
-        payload_mass = self.payload_weight
-
-        # Delta-V formula: delta-V = sqrt(g0 * earth_radius) * (sqrt(2 * (altitude + earth_radius)) - sqrt(earth_radius))
-        delta_v = (g0 * total_mass / (total_mass - payload_mass)) ** 0.5 * (2 * (altitude + earth_radius)) ** 0.5 - earth_radius ** 0.5
+        m0 = dry_mass + propellant_weight
+        mf = dry_mass
+        Isp = engine_isp
+        # delta v = isp x gravitational constiant x log((drymass+propellent)/drymass)
+        delta_v = Isp * g0 * math.log(m0 / mf)
         return delta_v
+    
+    def calculate_orbital_delta_v(self):
+        # Calculates how much delta-v is required to reach desired altitude
+        # Constants
+        G = 6.67430e-11  # gravitational constant (m^3 kg^-1 s^-2)
+        M = 5.972e24     # mass of Earth (kg)
+        R = 6371000      # Earth's radius in meters
+        altitude = self.altitude
+        r = R + altitude  # Total distance from Earth's center
+
+        # Orbital Delta-V formula: delta-V = sqrt(g0 * earth_radius) * (sqrt(2 * (altitude + earth_radius)) - sqrt(earth_radius))
+        orbital_velocity = math.sqrt(G * M / r)  # m/s
+        return orbital_velocity
+
 
     def estimate_chassis_weight(self, propellant_weight):
 
