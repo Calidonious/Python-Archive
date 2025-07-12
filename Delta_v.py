@@ -69,7 +69,7 @@ class RocketCalculator(ctk.CTk):
                                                    "In order to fly ex. 0.75 means your engine can lift %75,\n"
                                                    "Of the rocket weight and you need to add more engines.\n"
                                                    "The average range of satellite weights is 100-3500kg in real life.\n\n"
-                                                    "The range of average altitudes depends on your misson requirements,\n"
+                                                    "The range of average altitudes depends on your mission requirements,\n"
                                                     "The boundary commonly used to define the beginning of space is the Kármán line,\n"
                                                     "The Kármán line is located approximately 100 kilometers above sea level.\n\n"
                                                          
@@ -119,8 +119,12 @@ class RocketCalculator(ctk.CTk):
         self.num_engines_entry = ctk.CTkEntry(main_menu_frame, placeholder_text="1")
         self.num_engines_entry.grid(row=3, column=1, padx=10, pady=5)
 
+        self.real_var = tk.BooleanVar(value=False)
+        self.realistic_check = ctk.CTkCheckBox(main_menu_frame, text="Include Realistic losses? (~2.2km/s)", variable=self.real_var, onvalue=True,offvalue=False)
+        self.realistic_check.grid(row=4, column=1, padx=10, pady=5)
+
         self.calculate_button = ctk.CTkButton(main_menu_frame, text="Calculate", command=self.calculate)
-        self.calculate_button.grid(row=4, columnspan=2, padx=10, pady=10)
+        self.calculate_button.grid(row=5, columnspan=2, padx=10, pady=10)
         ## End of stuff in main_menu_frame ##
 
         ## menu_frame2 is in master_menu_frame alongside menu_frame ##
@@ -137,16 +141,14 @@ class RocketCalculator(ctk.CTk):
                                                             "And not use a curved assent profile,\n"
                                                             "Which is obviously way more efficient.\n"
                                                             "\n-3. It assumes gravity is constant, it is not,\n"
-                                                            "In real life gravity decreases exponentially the farther from earth you are,\n"
-                                                            "Meaning you will need less thrust and use less fuel as you ascend.\n"
-                                                            "\n-4. It assumes your going full throttle the whole way,\n"
-                                                            "In real life you would feather the throttle out as you ascend,\n"
-                                                            "Saving you fuel because your not wasting fuel \n"
-                                                            "By over speeding and fighting against the atmosphere.\n"
-                                                            "\n-5. It assumes the isp, thrust and fuel density values of the rocket,\n"
-                                                            "Will not change or fluctuate during flight and that you will get the rated fuel economy.\n"
-                                                            "\n-6. it assumes the rocket will remain the same weight during the entire flight,\n"
-                                                            "In real life your rocket will lose weight as it uses the fuel which would save fuel.\n"
+                                                            "In real life gravity decreases modestly over a typical launch\n"
+                                                            "(from 9.81 to ~8.7 m/s² at 400 km), which would marginally save fuel.\n"
+                                                            "\n-4. It assumes your going full throttle,\n"
+                                                            "In real life you would feather the throttle out as you ascend\n"
+                                                            "And reach max-Q, over speeding generates stress and wastes fuel.\n"
+                                                            "this simplification is fine for educational use, but is not flight-sim accurate.\n\n"
+                                                            "Note: enabling realistic losses alters the calculation to account for\n"
+                                                            "Gravity losses ~2km/s and Atmospheric drag ~0.5km/s.\n"
                                                             "\nKeeping these things in mind,\n"
                                                             "You will more then likely need way less fuel then listed to get to orbit,\n"
                                                             "But it greatly depends on your launch strategy!")
@@ -172,12 +174,14 @@ class RocketCalculator(ctk.CTk):
     def calculate(self):
         try:
             payload_weight = float(self.payload_weight_entry.get())
-            altitude = float(self.altitude_entry.get())
+            altitude = float(self.altitude_entry.get()) * 1000
             num_engines = int(self.num_engines_entry.get())
             engine = self.engine_var.get()
             fuel_type = Rocket.ROCKET_ENGINES[engine]["Fuel_Type"]
+            real_loss = self.real_var.get()
 
-            rocket = Rocket(payload_weight, altitude, engine, fuel_type, num_engines)
+
+            rocket = Rocket(payload_weight, altitude, engine, fuel_type, num_engines, real_loss)
             self.results_label.configure(text=rocket.calculate_performance())
         except ValueError:
             self.results_label.configure(text="Please enter valid numbers.")
@@ -247,35 +251,77 @@ class Rocket:
     }
 
 
-    def __init__(self, payload_weight, altitude, engine, fuel_type, num_engines):
+    def __init__(self, payload_weight, altitude, engine, fuel_type, num_engines, real_loss):
         self.payload_weight = payload_weight
         self.altitude = altitude
         self.engine = engine
         self.fuel_type = fuel_type
         self.num_engines = num_engines
+        self.real_loss = real_loss
 
     def calculate_performance(self):
-        engine_thrust = self.ROCKET_ENGINES[self.engine]["Thrust"] * self.num_engines
-        engine_isp = self.ROCKET_ENGINES[self.engine]["ISP"]
-        engine_weight = self.ROCKET_ENGINES[self.engine]["Weight"] * self.num_engines
+        # Constants and engine data
+        engine_data = self.ROCKET_ENGINES[self.engine]
         fuel_density = self.FUEL_TYPES[self.fuel_type]["Density"]
-        burn_time = self.altitude / engine_isp
-        fuel_liters_needed = (engine_thrust / engine_isp) * burn_time / fuel_density
-        propellant_weight = fuel_liters_needed * fuel_density
-        chassis_weight = self.estimate_chassis_weight(propellant_weight)
-        dry_mass = self.payload_weight + chassis_weight + engine_weight
-        rocket_weight = self.payload_weight + propellant_weight + chassis_weight + engine_weight
-        thrust_weight_ratio = engine_thrust / rocket_weight
-        delta_v = self.calculate_delta_v(propellant_weight, dry_mass, engine_isp)
+        g0 = 9.81  # Earth's surface gravity (m/s^2)
+
+        engine_thrust = engine_data["Thrust"] * self.num_engines
+        engine_isp = engine_data["ISP"]
+        engine_weight = engine_data["Weight"] * self.num_engines
+
+
+        # Estimate delta-v needed to reach target orbit
         orbital_delta_v = self.calculate_orbital_delta_v()
+
+        # Estimate dry mass with rough placeholder chassis weight
+        chassis_ratio = 0.1
+        placeholder_chassis_weight = self.payload_weight * chassis_ratio
+        dry_mass_estimate = self.payload_weight + engine_weight + placeholder_chassis_weight
+
+        # First estimate of propellant weight using Tsiolkovsky
+        mass_ratio = math.exp(orbital_delta_v / (engine_isp * g0))
+        propellant_weight = dry_mass_estimate * (mass_ratio - 1)
+
+        # Recalculate chassis weight based on actual propellant
+        chassis_weight = self.estimate_chassis_weight(propellant_weight)
+
+        # Recalculate dry mass with real chassis weight
+        dry_mass = self.payload_weight + engine_weight + chassis_weight
+
+        # Refine propellant weight now that dry mass is final
+        refined_mass_ratio = math.exp(orbital_delta_v / (engine_isp * g0))
+        propellant_weight = dry_mass * (refined_mass_ratio - 1)
+
+        # Convert propellant weight to volume (liters)
+        fuel_liters_needed = propellant_weight / fuel_density
+
+        # Calculate burn time
+        burn_time = (propellant_weight * engine_isp * g0) / engine_thrust
+
+        # Rocket mass and thrust-to-weight ratio
+        total_mass = dry_mass + propellant_weight
+        thrust_weight_ratio = engine_thrust / total_mass
+
+        # Available delta-v
+        delta_v = self.calculate_delta_v(propellant_weight, dry_mass, engine_isp)
 
         if thrust_weight_ratio <= 1.00:
             needed_engines = "Add more thrust!"
         else:
             needed_engines = "Ready for Lift-off!"
 
+        if self.altitude <= 2000000:
+            orbit_type = "Low Earth Orbit (LEO)"
+        elif self.altitude <= 35786000:
+            orbit_type = "Medium Earth Orbit (MEO)"
+        elif self.altitude == 35786000:
+            orbit_type = "Geostationary Orbit (GEO)"
+        else:
+            orbit_type = "High/Geostationary Elliptical Orbit (HEO)"
 
-        return f"Total Weight: {rocket_weight:.2f} kg\n" \
+
+        return f"Orbit Class: {orbit_type}\n" \
+               f"Total Weight: {total_mass:.2f} kg\n" \
                f"Payload Weight: {self.payload_weight:.2f} kg\n" \
                f"Chassis Weight: {chassis_weight:.2f} kg\n" \
                f"Fuel Weight needed: {propellant_weight:.2f} kg\n" \
@@ -285,35 +331,39 @@ class Rocket:
                f"Fuel Needed (Liters): {fuel_liters_needed:.2f}\n" \
                f"Selected Fuel Density: {fuel_density} kg/L\n" \
                f"Total Engine Thrust: {engine_thrust} N\n" \
-               f"Thrust to Weight Ratio: {thrust_weight_ratio:.2f}\n" \
+               f"Thrust to Weight Ratio: {thrust_weight_ratio:.2f}:1\n" \
                f"Do i have enough engines?: {needed_engines}\n" \
                f"Engine ISP: {engine_isp} s\n" \
                f"Burn Time: {burn_time:.2f} seconds\n" \
-               f"Delta-V Available: {delta_v:.2f} m/s" \
-               f"Delta-V required for altitude: {orbital_delta_v:.2f} m/s"
+               f"Delta-V Available: {delta_v:.2f} m/s\n" \
+               f"Delta-V required for altitude: {orbital_delta_v:.2f} m/s\n" \
+               f"Realistic Losses Included: {self.real_loss}"
+
 
     def calculate_delta_v(self, propellant_weight, dry_mass, engine_isp):
-        # Calculates total amount of delta-v availale in the rocket
+        # Calculates total amount of delta-v available in the rocket
         # Constants for delta-V calculation (values are approximate)
         g0 = 9.81  # Earth's surface gravity (m/s^2)
         m0 = dry_mass + propellant_weight
         mf = dry_mass
-        Isp = engine_isp
-        # delta v = isp x gravitational constiant x log((drymass+propellent)/drymass)
-        delta_v = Isp * g0 * math.log(m0 / mf)
+        isp = engine_isp
+        # delta v = isp x gravitational constant x log((drymass+propellant)/drymass)
+        delta_v = isp * g0 * math.log(m0 / mf)
         return delta_v
     
     def calculate_orbital_delta_v(self):
         # Calculates how much delta-v is required to reach desired altitude
         # Constants
-        G = 6.67430e-11  # gravitational constant (m^3 kg^-1 s^-2)
-        M = 5.972e24     # mass of Earth (kg)
-        R = 6371000      # Earth's radius in meters
+        g = 6.67430e-11  # gravitational constant (m^3 kg^-1 s^-2)
+        m = 5.972e24     # mass of Earth (kg)
+        ra = 6371000      # Earth's radius in meters
         altitude = self.altitude
-        r = R + altitude  # Total distance from Earth's center
+        r = ra + altitude  # Total distance from Earth's center
 
         # Orbital Delta-V formula: delta-V = sqrt(g0 * earth_radius) * (sqrt(2 * (altitude + earth_radius)) - sqrt(earth_radius))
-        orbital_velocity = math.sqrt(G * M / r)  # m/s
+        orbital_velocity = math.sqrt(g * m / r)  # m/s
+        if self.real_loss:
+            orbital_velocity += 2200  # account for real-world launch profile losses
         return orbital_velocity
 
 
